@@ -18,7 +18,7 @@ class KaggleAPI:
             for account in accounts_list:
                 self.accounts[account['key']] = {
                     'username': account['username'],
-                    'password': account['key']
+                    'key': account['key']
                 }
         else:
             self.auth_csv_file = os.path.join(os.path.dirname(__file__), 'users-private.csv')
@@ -28,6 +28,8 @@ class KaggleAPI:
 
         self.kaggle_auth_file = os.path.join(str(Path.home()), '.kaggle', 'kaggle.json')
         self.kaggle_kernel_dir = os.path.join(str(Path.home()), 'kaggle', 'kernel')
+        os.makedirs(os.path.join(str(Path.home()), '.kaggle'), exist_ok=True)
+        self.kaggle_kernel_metadata_path = os.path.join(self.kaggle_kernel_dir, 'kernel-metadata.json')
         os.makedirs(self.kaggle_kernel_dir, exist_ok=True)
         self.kaggle_kernel_py_path = os.path.join(self.kaggle_kernel_dir, 'kernel.py')
     
@@ -38,7 +40,7 @@ class KaggleAPI:
                 for row in reader:
                     account_info = {
                         'username': row['username'],
-                        'password': row['password']
+                        'key': row['password']
                     }
                     self.accounts[str(row['key'])] = account_info
         except Exception as e:
